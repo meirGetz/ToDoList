@@ -1,4 +1,5 @@
 package task.model;
+
 import java.time.LocalDateTime;
 import java.sql.Time;
 
@@ -7,16 +8,18 @@ public class ListObject {
     String m_title;
     String m_description;
     int m_priority;
-    LocalDateTime  m_start_time;
+    LocalDateTime m_start_time;
     LocalDateTime m_end_time;
+    float m_id;
 
     public ListObject(String title, String description,
-                      int priority, LocalDateTime  start_time, LocalDateTime end_time) {
+                      int priority, LocalDateTime start_time, LocalDateTime end_time, float id) {
         m_title = title;
         m_description = description;
         m_priority = priority;
         m_start_time = start_time;
         m_end_time = end_time;
+        m_id = id;
     }
 
     public String getTitle() {
@@ -31,7 +34,7 @@ public class ListObject {
         return m_priority;
     }
 
-    public LocalDateTime  getStartTime() {
+    public LocalDateTime getStartTime() {
         return m_start_time;
     }
 
@@ -58,4 +61,7 @@ public class ListObject {
     public void setEndTime(LocalDateTime endTime) {
         m_end_time = endTime;
     }
+
+    public float getId() {return m_id;}
+
 }

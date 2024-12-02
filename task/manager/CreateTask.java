@@ -1,21 +1,19 @@
 package task.manager;
 import task.model.ListObject;
 import java.time.LocalDateTime;
-
-
 import java.sql.Time;
 import java.util.Scanner;
 
 public class CreateTask {
 private Scanner scanner = new Scanner(System.in);
-
+    private static float id = 0;
     public ListObject createTask() {
         String title = createTitle();
         String description = createDescription();
         int priority = prioritize();
         LocalDateTime  startTime = LocalDateTime.now();
         LocalDateTime endTime = endTask();
-        return new ListObject(title,description,priority,startTime,endTime);
+        return new ListObject(title,description,priority,startTime,endTime,id++);
     }
 
     private String createTitle(){
