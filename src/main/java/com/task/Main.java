@@ -1,10 +1,13 @@
-import java.util.Scanner;
+package com;
 
-import task.model.ListObject;
-import task.manager.CreateTask;
+import com.task.manager.CreateTask;
+import com.task.model.ListObject;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+@SpringBootApplication
 public class Main {
     public static void main(String[] args) {
+
         CreateTask task = new CreateTask();
         //only for test
         ListObject new_task = task.createTask();

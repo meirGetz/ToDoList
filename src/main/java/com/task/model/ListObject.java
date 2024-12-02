@@ -1,7 +1,6 @@
-package task.model;
+package com.task.model;
 
 import java.time.LocalDateTime;
-import java.sql.Time;
 
 public class ListObject {
 

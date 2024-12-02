@@ -1,7 +1,7 @@
-package task.manager;
-import task.model.ListObject;
+package com.task.manager;
+import src.main.java.com.task.model.ListObject;
+
 import java.time.LocalDateTime;
-import java.sql.Time;
 import java.util.Scanner;
 
 public class CreateTask {

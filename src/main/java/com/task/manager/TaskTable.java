@@ -1,4 +1,4 @@
-package task.manager;
+package com.task.manager;
 
 public class TaskTable {
 
