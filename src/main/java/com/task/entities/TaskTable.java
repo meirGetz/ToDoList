@@ -1,37 +1,48 @@
-package com.task.manager;
+package com.task.entities;
 
-import com.task.model.ListObject;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
-@Table(name = "TaskTable")
+@Table(name = "task_table")
 public class TaskTable {
 
     @Id
-    @Column(name = "task Id")
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty("id")
+    private Long id;
 
-    @Embedded
-    private ListObject listObject;
+    @OneToMany(mappedBy = "task", cascade = CascadeType.PERSIST)
+    private List<ListObject> listObjects;
 
-    public TaskTable(long id, ListObject listObject) {
-        id = this.id;
-        this.listObject = listObject;
+
+    public TaskTable() {
     }
-    public TaskTable() {}
+
+    public TaskTable( List<ListObject> listObjects) {
+        this.listObjects = listObjects;
+    }
 
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
-    public ListObject getListObject() {
-        return listObject;
-    }
-    public void setListObject(ListObject listObject) {
-        this.listObject = listObject;
+
+    public List<ListObject> getListObjects() {
+        if (listObjects == null) {
+            listObjects = new ArrayList<>();
+        }
+        return listObjects;
     }
 
 
+    public void setListObjects(List<ListObject> listObjects) {
+        this.listObjects = listObjects;
+    }
 }
