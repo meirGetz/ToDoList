@@ -1,53 +1,47 @@
-package com.task.model;
+package com.task.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDateTime;
 
-@Embeddable
+@Entity
+@Table(name = "list_objects")
 public class ListObject {
 
     @Id
-    @Column(name = "id")  // שם העמודה במסד הנתונים
-    private Long m_id;  // המפתח הראשי של הטבלה
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty("id")
+    private Long id;
+    @NotBlank(message = "Title is mandatory")
+    private String title;
 
-    @Column(name = "title")
-    private String m_title;
+    @ManyToOne
+    @JoinColumn(name = "task_id", referencedColumnName = "id")
+    private TaskTable task;
 
-    @Column(name = "description")
-    private String m_description;
+    @NotBlank(message = "Description is mandatory")
+    private String description;
 
-    @Column(name = "priority")
+    @Min(1)
+    @Max(5)
     private int m_priority;
 
-    @Column(name = "start_time")
-    private LocalDateTime m_start_time;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
 
-    @Column(name = "end_time")
-    private LocalDateTime m_end_time;
-
-    // קונסטרוקטור ברירת מחדל
     public ListObject() {
     }
 
-    // קונסטרוקטור עם פרמטרים
-    public ListObject(String title, String description,
-                      int priority, LocalDateTime start_time, LocalDateTime end_time, Long id) {
-        m_title = title;
-        m_description = description;
-        m_priority = priority;
-        m_start_time = start_time;
-        m_end_time = end_time;
-        m_id = id;
-    }
-
-    // גטרים וסטרים
     public String getTitle() {
-        return m_title;
+        return this.title;
     }
 
     public String getDescription() {
-        return m_description;
+        return this.description;
     }
 
     public int getPriority() {
@@ -55,23 +49,19 @@ public class ListObject {
     }
 
     public LocalDateTime getStartTime() {
-        return m_start_time;
+        return this.startTime;
     }
 
     public LocalDateTime getEndTime() {
-        return m_end_time;
-    }
-
-    public Long getId() {
-        return m_id;
+        return this.endTime;
     }
 
     public void setTitle(String title) {
-        m_title = title;
+        this.title = title;
     }
 
     public void setDescription(String description) {
-        m_description = description;
+        this.description = description;
     }
 
     public void setPriority(int priority) {
@@ -79,10 +69,26 @@ public class ListObject {
     }
 
     public void setStartTime(LocalDateTime startTime) {
-        m_start_time = startTime;
+        this.startTime = startTime;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
-        m_end_time = endTime;
+    public void setEndTime(LocalDateTime startTime, int days, int hours, int minutes) {
+        this.endTime = startTime.plusDays(days).plusHours(hours).plusMinutes(minutes);
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public TaskTable getTask() {
+        return task;
+    }
+
+    public void setTask(TaskTable task) {
+        this.task = task;
     }
 }
