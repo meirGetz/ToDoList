@@ -1,52 +1,45 @@
 package com.task.manager;
-import src.main.java.com.task.model.ListObject;
+
+import com.task.entities.ListObject;
+import com.task.entities.TaskTable;
+import com.task.repositories.TaskTableRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.Scanner;
 
+@RestController
+@RequestMapping("/api/tasks")
 public class CreateTask {
-private Scanner scanner = new Scanner(System.in);
-    private static float id = 0;
-    public ListObject createTask() {
-        String title = createTitle();
-        String description = createDescription();
-        int priority = prioritize();
-        LocalDateTime  startTime = LocalDateTime.now();
-        LocalDateTime endTime = endTask();
-        return new ListObject(title,description,priority,startTime,endTime,id++);
-    }
 
-    private String createTitle(){
-        System.out.println("Enter title: ");
-        String title = scanner.nextLine();
-        return title;
-    }
+    @Autowired
+    private TaskTableRepository taskTableRepository;  // השתמש ב-TaskTableRepository
 
-    private String createDescription(){
-        System.out.println("Enter description: ");
-        String description = scanner.nextLine();
-        return description;
-    }
-    private int prioritize() {
-        int priority = getValidatedInt("Enter priority between 1 to 5: ", 1, 5);
-        return priority;
-    }
+    @PostMapping("/create")
+    public void createTask(@RequestBody ListObject listObject) {
+        TaskTable task = new TaskTable();
 
-    private LocalDateTime endTask(){
-        LocalDateTime startTime = LocalDateTime.now();
-        int day = getValidatedInt("\nEnter for how many days: ",1,365);
-        int hours = getValidatedInt("\nEnter for how many hours: ",0,24);
-        int minutes =getValidatedInt("\nEnter for how many minutes: ",0,59);
-        return startTime.plusDays(day).plusHours(hours).plusMinutes(minutes);
-    }
+//        // יצירת משימה חדשה
+//        TaskTable task = new TaskTable();
+//
+//        // יצירת ListObject חדש
+//        listObject.setTitle("Project meeting");
+//        listObject.setDescription("scram");
+//        listObject.setPriority(5);
+//        listObject.setStartTime(LocalDateTime.parse("2025-12-03T10:15:30"));
+//        listObject.setEndTime(listObject.getStartTime(), 4, 4, 4);
+//        task.getListObjects().forEach(Object -> listObject.setTask(task));
+//
+//        // שמירה של המשימה במסד הנתונים
+//        taskTableRepository.save(task);  // שמור את המשימה
+        // יצירת משימה חדשה
 
-    private int getValidatedInt(String prompt, int min, int max) {
-        System.out.println(prompt);
-        int value = scanner.nextInt();
-        while (value < min || value > max) {
-            System.out.println("Value out of range. Try again.");
-            value = scanner.nextInt();
-        }
-        return value;
+        // הוספת ה-ListObject למשימה
+        listObject.setTask(task);  // קביעת הקשר למשימה
+        task.getListObjects().add(listObject);  // הוספת ה-ListObject למשימה
+
+
+        // שמירה של המשימה במסד הנתונים
+        taskTableRepository.save(task);
     }
 }
