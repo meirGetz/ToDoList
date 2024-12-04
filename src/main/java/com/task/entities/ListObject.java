@@ -30,6 +30,9 @@ public class ListObject {
     @Max(5)
     private int m_priority;
 
+    @NotBlank(message = "Pending")
+    private String status = "Pending";
+
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
