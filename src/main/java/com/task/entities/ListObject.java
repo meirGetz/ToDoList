@@ -21,7 +21,7 @@ public class ListObject {
     @NotBlank(message = "Title is mandatory")
     private String title;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "task_id", referencedColumnName = "id")
     @JsonIgnore
     @JsonBackReference
