@@ -15,6 +15,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/tasks/create").permitAll()
                         .requestMatchers("/api/tasks/{id}/status").permitAll()
+                        .requestMatchers("/api/tasks/{id}/delete").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();
