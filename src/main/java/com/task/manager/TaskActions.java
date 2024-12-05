@@ -3,11 +3,13 @@ package com.task.manager;
 import com.task.DTO.ListObjectRequest;
 import com.task.entities.ListObject;
 import com.task.entities.TaskTable;
+import com.task.repositories.TaskRepository;
 import com.task.repositories.TaskTableRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.Optional;
 import java.time.LocalDateTime;
@@ -18,7 +20,8 @@ public class TaskActions {
 
     @Autowired
     private TaskTableRepository taskTableRepository;  // השתמש ב-TaskTableRepository
-
+    @Autowired
+    private TaskRepository taskRepository;
     @PostMapping("/create")
     public void createTask(@RequestBody ListObjectRequest request) {
         ListObject listObject = new ListObject();
@@ -47,4 +50,14 @@ public class TaskActions {
         }
     }
 
+    @DeleteMapping("/{id}/delete")
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+        if (taskTableRepository.existsById(id)) {
+            taskRepository.deleteById(id);
+            taskTableRepository.deleteById(id);
+            return ResponseEntity.noContent().build(); // 204 No Content
+        } else {
+            return ResponseEntity.notFound().build(); // 404 Not Found
+        }
+    }
 }
