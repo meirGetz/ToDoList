@@ -13,8 +13,8 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // ביטול CSRF
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/tasks/create").permitAll() // התרת גישה לנתיב
-                        .anyRequest().authenticated() // כל שאר הבקשות דורשות אימות
+                        .requestMatchers("/api/tasks/create").permitAll()
+                        .anyRequest().authenticated()
                 );
         return http.build();
     }
