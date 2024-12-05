@@ -45,4 +45,8 @@ public class TaskTable {
     public void setListObjects(List<ListObject> listObjects) {
         this.listObjects = listObjects;
     }
+
+    public void setStatus(String status) {
+        listObjects.get(0).setStatus(status);
+    }
 }
