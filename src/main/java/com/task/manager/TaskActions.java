@@ -2,9 +2,9 @@ package com.task.manager;
 
 import com.task.DTO.ListObjectRequest;
 import com.task.entities.ListObject;
-import com.task.entities.TaskTable;
+//import com.task.entities.TaskTable;
 import com.task.repositories.TaskRepository;
-import com.task.repositories.TaskTableRepository;
+//import com.task.repositories.TaskTableRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,45 +19,45 @@ import java.time.LocalDateTime;
 public class TaskActions {
 
     @Autowired
-    private TaskTableRepository taskTableRepository;  // השתמש ב-TaskTableRepository
-    @Autowired
     private TaskRepository taskRepository;
+
     @PostMapping("/create")
     public void createTask(@RequestBody ListObjectRequest request) {
         ListObject listObject = new ListObject();
-        TaskTable task = new TaskTable();
-        listObject.setTask(task);
+//        TaskTable task = new TaskTable();
+//        listObject.setTask(task);
         listObject.setTitle(request.getTitle());
         listObject.setDescription(request.getDescription());
         listObject.setStartTime(request.getStartTime());
         listObject.setPriority(request.getPriority());
         listObject.setStatus(request.getStatus());
         listObject.setEndTime(request.getStartTime(), request.getDays(), request.getHours(), request.getMinutes());
-        task.getListObjects().add(listObject);
-        taskTableRepository.save(task);
+        taskRepository.save(listObject);
     }
 
     @PatchMapping("/{id}/status")
     public ResponseEntity<ListObject> changeStatus(@PathVariable Long id, @RequestBody ListObjectRequest request) {
-        Optional<TaskTable> taskOptional = taskTableRepository.findById(id);
-        if (taskOptional.isPresent()) {
-            TaskTable task = taskOptional.get();
-            task.setStatus(request.getStatus());
-            taskTableRepository.save(task);
-            return ResponseEntity.ok(task.getListObjects().get(0));
-        } else {
-            return ResponseEntity.notFound().build();
+        Optional<ListObject> object = taskRepository.findById(id);
+        if (object.isPresent()) {
+            ListObject listObject = object.get();
+            listObject.setStatus(request.getStatus());
+            taskRepository.save(listObject);
+            return ResponseEntity.ok(listObject);
         }
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
-        if (taskTableRepository.existsById(id)) {
+        if (taskRepository.existsById(id)) {
             taskRepository.deleteById(id);
-            taskTableRepository.deleteById(id);
+            taskRepository.deleteById(id);
             return ResponseEntity.noContent().build(); // 204 No Content
         } else {
             return ResponseEntity.notFound().build(); // 404 Not Found
         }
     }
 }
+
+
+

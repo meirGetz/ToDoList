@@ -21,12 +21,6 @@ public class ListObject {
     @NotBlank(message = "Title is mandatory")
     private String title;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "task_id", referencedColumnName = "id")
-    @JsonIgnore
-    @JsonBackReference
-    private TaskTable task;
-
     @NotBlank(message = "Description is mandatory")
     private String description;
 
@@ -97,11 +91,11 @@ public class ListObject {
         return id;
     }
 
-    public TaskTable getTask() {
-        return task;
-    }
-
-    public void setTask(TaskTable task) {
-        this.task = task;
-    }
+//    public TaskTable getTask() {
+//        return task;
+//    }
+//
+//    public void setTask(TaskTable task) {
+//        this.task = task;
+//    }
 }
