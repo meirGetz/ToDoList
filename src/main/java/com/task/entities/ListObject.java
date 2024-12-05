@@ -79,6 +79,12 @@ public class ListObject {
         this.endTime = startTime.plusDays(days).plusHours(hours).plusMinutes(minutes);
     }
 
+    public String getStatus(){
+        return this.status;
+    }
+    public void setStatus(String status){
+        this.status = status;
+    }
     public void setId(Long id) {
         this.id = id;
     }
