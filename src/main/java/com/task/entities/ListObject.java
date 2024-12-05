@@ -1,5 +1,7 @@
 package com.task.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
@@ -21,6 +23,8 @@ public class ListObject {
 
     @ManyToOne
     @JoinColumn(name = "task_id", referencedColumnName = "id")
+    @JsonIgnore
+    @JsonBackReference
     private TaskTable task;
 
     @NotBlank(message = "Description is mandatory")
