@@ -1,5 +1,6 @@
 package com.task.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
@@ -16,6 +17,7 @@ public class TaskTable {
     private Long id;
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.PERSIST)
+    @JsonManagedReference
     private List<ListObject> listObjects;
 
 
