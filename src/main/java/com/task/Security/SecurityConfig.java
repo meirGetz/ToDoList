@@ -14,6 +14,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // ביטול CSRF
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/tasks/create").permitAll()
+                        .requestMatchers("/api/tasks/{id}/status").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();
