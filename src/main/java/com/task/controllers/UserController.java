@@ -46,6 +46,18 @@ public class UserController {
         }
         return ResponseEntity.notFound().build();
     }
+
+
+    @DeleteMapping("/{id}/deleteUser")
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+            userRepository.deleteById(id);
+            return ResponseEntity.noContent().build(); // 204 No Content
+        } else {
+            return ResponseEntity.notFound().build(); // 404 Not Found
+        }
+    }
 }
 
 
