@@ -35,7 +35,17 @@ public class UserController {
         Users createdUser = userService.createUser(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
-
+    @PatchMapping("/{id}/changesPassword")
+    public ResponseEntity<Users> changeStatus(@PathVariable Long id, @RequestBody Users request) {
+        Optional<Users> object = userRepository.findById(id);
+        if (object.isPresent()) {
+            Users user = object.get();
+            user.setPassword(request.getPassword());
+            userRepository.save(user);
+            return ResponseEntity.ok(user);
+        }
+        return ResponseEntity.notFound().build();
+    }
 }
 
 
