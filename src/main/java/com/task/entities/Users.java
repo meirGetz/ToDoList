@@ -1,9 +1,9 @@
 package com.task.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Users")
@@ -12,13 +12,19 @@ public class Users {
     private Long id;
     @Column(unique = true, nullable = false)
     private String username;
-    @Column(unique = true, nullable = false)
+    @Column(unique = false, nullable = false)
     private String password;
     @Column(unique = true, nullable = false)
     private String email;
     @Column(unique = true, nullable = false)
     private String phone;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn
+    private List<ListObject> user_list = new ArrayList<>();
 
+    public Users() {
+
+    }
     public void setId(Long id) {
         this.id = id;
     }
