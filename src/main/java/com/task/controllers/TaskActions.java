@@ -1,4 +1,4 @@
-package com.task.manager;
+package com.task.controllers;
 
 import com.task.DTO.ListObjectRequest;
 import com.task.entities.ListObject;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.Optional;
-import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/tasks")
