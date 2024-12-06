@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import org.apache.catalina.User;
 
 import java.time.LocalDateTime;
 
@@ -30,6 +31,10 @@ public class ListObject {
 
     @NotBlank(message = "Pending")
     private String status = "Pending";
+
+    @ManyToOne
+    @JoinColumn(name = "user_email", referencedColumnName = "email", nullable = false)
+    private Users user;
 
     private LocalDateTime startTime;
     private LocalDateTime endTime;
