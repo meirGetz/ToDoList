@@ -1,21 +1,46 @@
 package com.task.Service;
 
+import com.task.DTO.UserDto;
 import com.task.entities.Users;
+import com.task.exceptions.UserAlreadyExistException;
 import com.task.repositories.UserRepository;
+import jakarta.transaction.Transactional;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-@Service
-public class UserService {
+import java.util.Arrays;
+import java.util.Collections;
 
-    private final UserRepository userRepository;
+@Service
+@Transactional
+public class UserService implements IUserService {
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;  // הוספת BCryptPasswordEncoder
 
     @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    private UserRepository repository;
+
+    @Override
+    public Users registerNewUserAccount(UserDto userDto) throws UserAlreadyExistException {
+        if (emailExists(userDto.getEmail())) {
+            throw new UserAlreadyExistException("There is an account with that email address: "
+                    + userDto.getEmail());
+        }
+
+        Users user = new Users();
+        user.setUsername(userDto.getFirstName() + " " + userDto.getLastName());
+        String encryptedPassword = passwordEncoder.encode(userDto.getPassword());
+        user.setPassword(encryptedPassword);
+        user.setEmail(userDto.getEmail());
+        user.setPhone(userDto.getPhone());
+        user.setRoles(Collections.singletonList("USER"));
+
+        return repository.save(user);
     }
 
-    public Users createUser(Users user) {
-        return userRepository.save(user);
+    private boolean emailExists(String email) {
+        return repository.findByEmail(email) != null;
     }
 }
