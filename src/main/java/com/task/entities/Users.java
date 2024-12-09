@@ -1,7 +1,9 @@
 package com.task.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
+import javax.management.relation.Role;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +11,10 @@ import java.util.List;
 @Table(name = "Users")
 public class Users {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty("id")
     private Long id;
+
     @Column(unique = true, nullable = false)
     private String username;
     @Column(unique = false, nullable = false)
@@ -19,14 +24,23 @@ public class Users {
     @Column(unique = true, nullable = false)
     private String phone;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn
     private List<ListObject> user_list = new ArrayList<>();
+    private boolean enabled;
+    @Column(unique = false, nullable = false)
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles;
 
     public Users() {
 
     }
     public void setId(Long id) {
         this.id = id;
+    }
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
+    public List<String> getRoles() {
+        return roles;
     }
     public void setUsername(String username) {
         this.username = username;
