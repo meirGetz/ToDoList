@@ -1,5 +1,7 @@
 package com.task.DTO;
 
+import com.task.entities.Users;
+
 import java.time.LocalDateTime;
 
 public class ListObjectRequest {
@@ -11,7 +13,14 @@ public class ListObjectRequest {
     private int days;
     private int hours;
     private int minutes;
+    private Users user;
 
+    public Users getUser() {
+        return user;
+    }
+    public void setUser(Users user) {
+        this.user = user;
+    }
     public String getTitle() {
         return title;
     }
