@@ -33,8 +33,9 @@ public class ListObject {
     private String status = "Pending";
 
     @ManyToOne
-    @JoinColumn(name = "user_email", referencedColumnName = "email", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private Users user;
+
 
     private LocalDateTime startTime;
     private LocalDateTime endTime;
@@ -42,6 +43,12 @@ public class ListObject {
     public ListObject() {
     }
 
+    public Users getUser() {
+        return user;
+    }
+    public void setUser(Users user) {
+        this.user = user;
+    }
     public String getTitle() {
         return this.title;
     }
@@ -96,11 +103,4 @@ public class ListObject {
         return id;
     }
 
-//    public TaskTable getTask() {
-//        return task;
-//    }
-//
-//    public void setTask(TaskTable task) {
-//        this.task = task;
-//    }
 }

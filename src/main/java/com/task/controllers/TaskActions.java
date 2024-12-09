@@ -3,8 +3,10 @@ package com.task.controllers;
 import com.task.DTO.ListObjectRequest;
 import com.task.entities.ListObject;
 //import com.task.entities.TaskTable;
+import com.task.entities.Users;
 import com.task.repositories.TaskRepository;
 //import com.task.repositories.TaskTableRepository;
+import com.task.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,20 +21,29 @@ public class TaskActions {
 
     @Autowired
     private TaskRepository taskRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping("/create")
     public void createTask(@RequestBody ListObjectRequest request) {
         ListObject listObject = new ListObject();
-//        TaskTable task = new TaskTable();
-//        listObject.setTask(task);
+
+        Users user = userRepository.findById(request.getUser().getId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
         listObject.setTitle(request.getTitle());
         listObject.setDescription(request.getDescription());
         listObject.setStartTime(request.getStartTime());
         listObject.setPriority(request.getPriority());
-        listObject.setStatus(request.getStatus());
+        listObject.setStatus(request.getStatus() != null ? request.getStatus() : "Pending");
+        listObject.setUser(user);
+
+        // חישוב זמן סיום
         listObject.setEndTime(request.getStartTime(), request.getDays(), request.getHours(), request.getMinutes());
+
         taskRepository.save(listObject);
     }
+
 
     @PatchMapping("/{id}/status")
     public ResponseEntity<ListObject> changeStatus(@PathVariable Long id, @RequestBody ListObjectRequest request) {
@@ -49,7 +60,6 @@ public class TaskActions {
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
         if (taskRepository.existsById(id)) {
-            taskRepository.deleteById(id);
             taskRepository.deleteById(id);
             return ResponseEntity.noContent().build(); // 204 No Content
         } else {
