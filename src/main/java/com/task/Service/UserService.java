@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -17,7 +18,7 @@ import java.util.Collections;
 @Transactional
 public class UserService implements IUserService {
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;  // הוספת BCryptPasswordEncoder
+    private PasswordEncoder passwordEncoder;  // הוספת BCryptPasswordEncoder
 
     @Autowired
     private UserRepository repository;
