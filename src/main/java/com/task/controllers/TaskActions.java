@@ -38,7 +38,6 @@ public class TaskActions {
         listObject.setStatus(request.getStatus() != null ? request.getStatus() : "Pending");
         listObject.setUser(user);
 
-        // חישוב זמן סיום
         listObject.setEndTime(request.getStartTime(), request.getDays(), request.getHours(), request.getMinutes());
 
         taskRepository.save(listObject);

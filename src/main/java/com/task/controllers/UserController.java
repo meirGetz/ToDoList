@@ -1,10 +1,13 @@
 package com.task.controllers;
 
 import com.task.DTO.UserDto;
+import com.task.LoginRequest;
 import com.task.Service.UserService;
 import com.task.entities.Users;
 import org.apache.catalina.User;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.bind.annotation.*;
@@ -23,28 +26,56 @@ public class UserController {
 
     private final UserService userService;
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService, UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserController(UserService userService, UserRepository userRepository,
+                          PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
-
-    @PostMapping("/registerNewUserAccount")
-    public ResponseEntity<Users> createUser(@RequestBody UserDto userDto, WebRequest request) {
-        Optional<Users> object;
-        Users user = new Users();
-        user.setUsername(userDto.getFirstName() + " " + userDto.getLastName());
-        String encryptedPassword = passwordEncoder.encode(userDto.getPassword());
+//
+//    @PostMapping("/registerNewUserAccount")
+//    public ResponseEntity<Users> createUser(@RequestParam String firstName,
+//                                            @RequestParam String lastName,
+//                                            @RequestParam String email,
+//                                            @RequestParam String phone,
+//                                            @RequestParam String password) {
+//        Users user = new Users();
+//        user.setUsername(firstName + " " + lastName);
+//        String encryptedPassword = passwordEncoder.encode(password);
+//        user.setPassword(encryptedPassword);
+//        user.setEmail(email);
+//        user.setPhone(phone);
+//        user.setRoles(Collections.singletonList("USER"));
+//        userRepository.save(user);
+//        return ResponseEntity.ok(user);
+//    }
+@PostMapping("/registerNewUserAccount")
+public ResponseEntity<Users> createUser(@RequestBody Users user) {
+    try {
+        String encryptedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encryptedPassword);
-        user.setEmail(userDto.getEmail());
-        user.setPhone(userDto.getPhone());
         user.setRoles(Collections.singletonList("USER"));
-        userRepository.save(user);
-//        userService.registerNewUserAccount(userDto);
+        Users save = userRepository.save(user);
         return ResponseEntity.ok(user);
+    } catch (Exception e) {
+        // Log the error
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
     }
+}
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        Users user = userRepository.findByEmail(loginRequest.getEmail());
+        if (user == null || !passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        }
+        return ResponseEntity.ok("Login successful");
+    }
+
+
 
     @PatchMapping("/{id}/changePassword")
     public ResponseEntity<Users> changePassword(@PathVariable Long id, @RequestBody Users request) {
