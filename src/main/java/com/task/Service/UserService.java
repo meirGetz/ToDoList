@@ -36,7 +36,7 @@ public class UserService implements IUserService {
         user.setPassword(encryptedPassword);
         user.setEmail(userDto.getEmail());
         user.setPhone(userDto.getPhone());
-        user.setRoles(Collections.singletonList("USER"));
+        user.setRole("USER");
 
         return repository.save(user);
     }

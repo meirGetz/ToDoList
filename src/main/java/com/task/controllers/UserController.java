@@ -2,6 +2,8 @@ package com.task.controllers;
 
 import com.task.DTO.UserDto;
 import com.task.LoginRequest;
+import com.task.Security.CustomUserDetailsService;
+import com.task.Security.JwtUtil;
 import com.task.Service.UserService;
 import com.task.entities.Users;
 import org.apache.catalina.User;
@@ -27,12 +29,15 @@ public class UserController {
     private final UserService userService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CustomUserDetailsService userDetailsService;
 
+    @Autowired
     public UserController(UserService userService, UserRepository userRepository,
-                          PasswordEncoder passwordEncoder) {
+                          PasswordEncoder passwordEncoder,CustomUserDetailsService userDetailsService) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.userDetailsService = userDetailsService;
     }
 //
 //    @PostMapping("/registerNewUserAccount")
@@ -56,7 +61,7 @@ public ResponseEntity<Users> createUser(@RequestBody Users user) {
     try {
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encryptedPassword);
-        user.setRoles(Collections.singletonList("USER"));
+        user.setRole("USER");
         Users save = userRepository.save(user);
         return ResponseEntity.ok(user);
     } catch (Exception e) {
@@ -65,6 +70,8 @@ public ResponseEntity<Users> createUser(@RequestBody Users user) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
     }
 }
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
@@ -72,8 +79,14 @@ public ResponseEntity<Users> createUser(@RequestBody Users user) {
         if (user == null || !passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
-        return ResponseEntity.ok("Login successful");
+
+        // יצירת ה-Token
+        String token = jwtUtil.generateToken(user.getEmail());
+
+        // החזרת ה-Token בתגובה
+        return ResponseEntity.ok(Collections.singletonMap("token", token));
     }
+
 
 
 

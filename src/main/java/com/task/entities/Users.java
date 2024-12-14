@@ -27,8 +27,7 @@ public class Users {
     private List<ListObject> user_list = new ArrayList<>();
     private boolean enabled;
     @Column(unique = false, nullable = false)
-    @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> roles;
+    private String role;
 
     public Users() {
 
@@ -36,11 +35,11 @@ public class Users {
     public void setId(Long id) {
         this.id = id;
     }
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
+    public void setRole(String role) {
+        this.role = role;
     }
-    public List<String> getRoles() {
-        return roles;
+    public String getRole() {
+        return role;
     }
     public void setUsername(String username) {
         this.username = username;
