@@ -9,8 +9,8 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    private final String secretKey = "abcdefghijklmnopqrstuvwxyztuvwxyz1234567890"; // המפתח הסודי
-    private final long expirationTime = 1000 * 60 * 60; // תוקף של שעה
+    private final String secretKey = "abcdefghijklmnopqrstuvwxyztuvwxyz1234567890";
+    private final long expirationTime = 1000 * 60 * 60; 
 
     // יצירת הטוקן
     public String generateToken(String email) {
@@ -22,12 +22,10 @@ public class JwtUtil {
                 .compact();
     }
 
-    // שליפת שם המשתמש מהטוקן
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    // שליפת כל הקליימים מהטוקן
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
                 .setSigningKey(secretKey)
@@ -35,19 +33,16 @@ public class JwtUtil {
                 .getBody();
     }
 
-    // שליפת קליים ספציפי
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
-    // אימות הטוקן
     public boolean validateToken(String token, org.springframework.security.core.userdetails.UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    // בדיקת פקיעת התוקף
     private boolean isTokenExpired(String token) {
         return extractClaim(token, Claims::getExpiration).before(new Date());
     }
