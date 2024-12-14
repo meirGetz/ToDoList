@@ -41,14 +41,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // JWT Stateless
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/user/**").permitAll() // מאפשר גישה חופשית לרישום והתחברות
-                        .requestMatchers("/api/tasks/**").hasRole("USER") // דורש תפקיד USER
-                        .anyRequest().authenticated() // שאר הבקשות דורשות אימות
+                        .requestMatchers("/api/user/**").permitAll() 
+                        .requestMatchers("/api/tasks/**").hasRole("USER") 
+                        .anyRequest().authenticated() 
                 )
-                .authenticationProvider(authenticationProvider()) // ספק אימות
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); // JWT Filter
+                .authenticationProvider(authenticationProvider()) 
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); 
 
         return http.build();
     }
