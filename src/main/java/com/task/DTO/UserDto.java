@@ -11,6 +11,9 @@ public class UserDto {
     @NotNull
     @NotEmpty
     private String lastName;
+@NotNull
+    @NotEmpty
+    private String role;
 
     @NotNull
     @NotEmpty
@@ -24,6 +27,12 @@ public class UserDto {
     @NotEmpty
     private String phone;
 
+    public String getRole(){
+        return role;
+    }
+    public void setRole(String role){
+        this.role = role;
+    }
     public String getPhone() {
         return phone;
     }
