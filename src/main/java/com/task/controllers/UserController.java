@@ -61,7 +61,7 @@ public ResponseEntity<Users> createUser(@RequestBody Users user) {
     try {
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encryptedPassword);
-        user.setRole("USER");
+
         Users save = userRepository.save(user);
         return ResponseEntity.ok(user);
     } catch (Exception e) {
@@ -80,10 +80,8 @@ public ResponseEntity<Users> createUser(@RequestBody Users user) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
 
-        // יצירת ה-Token
         String token = jwtUtil.generateToken(user.getEmail());
 
-        // החזרת ה-Token בתגובה
         return ResponseEntity.ok(Collections.singletonMap("token", token));
     }
 
