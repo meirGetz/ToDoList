@@ -77,11 +77,19 @@ public class TaskActions {
     }
 
 
-    @PatchMapping("/{id}/status")
-    public ResponseEntity<ListObject> changeStatus(@PathVariable Long id, @RequestBody ListObjectRequest request) {
-        Optional<ListObject> object = taskRepository.findById(id);
-        if (object.isPresent()) {
-            ListObject listObject = object.get();
+    @PatchMapping("/{id}/editStatus")
+    public ResponseEntity<?> changeStatus(@RequestHeader("Authorization") String token, @PathVariable Long id, @RequestBody ListObjectRequest request) {
+        String email = "";
+        try {
+            email = jwtUtil.extractUsername(token.substring(7));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
+        }
+        Users user = userRepository.findByEmail(email);
+        ListObject listObject = taskRepository.findById(id).get();
+//        Optional<ListObject> object = taskRepository.findById(id);
+        if (taskRepository.existsById(id) && (user.getId() == listObject.getUser().getId()||user.getRole().equals("ADMIN"))) {
+//            ListObject listObject = object.get();
             listObject.setStatus(request.getStatus());
             taskRepository.save(listObject);
             return ResponseEntity.ok(listObject);
