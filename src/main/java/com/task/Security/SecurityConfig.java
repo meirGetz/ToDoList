@@ -46,7 +46,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/user/login","/api/tasks/taskView").permitAll()
                         .requestMatchers("/api/user/**").hasRole("USER")
                         .requestMatchers("/api/tasks/createByAdmin").hasRole("ADMIN")
-                        .requestMatchers("/api/tasks/create", "/api/tasks/{id}/delete","/api/user/registerNewUserAccount").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/tasks/create", "/api/tasks/{id}/editStatus","/api/tasks/{id}/delete","/api/user/registerNewUserAccount").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()
                 )
 
