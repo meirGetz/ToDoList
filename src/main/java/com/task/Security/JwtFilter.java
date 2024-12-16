@@ -27,22 +27,18 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        // קרא את ה-Authorization Header
         String authorizationHeader = request.getHeader("Authorization");
         String token = null;
         String username = null;
 
-        // בדיקה אם ההאדר תקין ומתחיל ב-"Bearer "
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             token = authorizationHeader.substring(7);
             username = jwtUtil.extractUsername(token);
         }
 
-        // אם יש משתמש וללא Authentication
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-            // בדוק אם הטוקן תקין
             if (jwtUtil.validateToken(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
@@ -51,7 +47,6 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         }
 
-        // המשך לפילטר הבא בשרשרת
         filterChain.doFilter(request, response);
     }
 }

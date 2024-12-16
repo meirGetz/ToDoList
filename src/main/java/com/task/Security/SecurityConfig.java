@@ -41,13 +41,15 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) 
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/user/login","api/user/registerNewUserAccount").permitAll()
-                        .requestMatchers("/api/tasks/create","/api/tasks/{id}/delete","api/user/**").hasRole("USER")
+                        .requestMatchers("/api/user/login","/api/tasks/taskView").permitAll()
+                        .requestMatchers("/api/user/**").hasRole("USER")
                         .requestMatchers("/api/tasks/createByAdmin").hasRole("ADMIN")
-                        .anyRequest().authenticated() 
+                        .requestMatchers("/api/tasks/create", "/api/tasks/{id}/delete","/api/user/registerNewUserAccount").hasAnyRole("USER", "ADMIN")
+                        .anyRequest().authenticated()
                 )
+
                 .authenticationProvider(authenticationProvider()) 
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); 
 
