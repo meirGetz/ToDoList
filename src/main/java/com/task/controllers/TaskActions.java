@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -57,7 +58,7 @@ public class TaskActions {
     }
 
     @PostMapping("/createByAdmin")
-    public void createTask(@RequestBody ListObjectRequest request) {
+    public void createTaskByAdmin(@RequestBody ListObjectRequest request) {
         ListObject listObject = new ListObject();
 
         Users user = userRepository.findById(request.getUser().getId())
@@ -97,6 +98,28 @@ public class TaskActions {
             return ResponseEntity.notFound().build(); // 404 Not Found
         }
     }
+    @GetMapping("/taskView")
+    public ResponseEntity<?> getTasks(@RequestHeader("Authorization") String token) {
+        String email = "";
+        try {
+            email = jwtUtil.extractUsername(token.substring(7));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
+        }
+
+        Users user = userRepository.findByEmail(email);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+
+        List<ListObjectRequest> tasks = taskRepository.findByUserId(user.getId());
+        if (tasks.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
+        return ResponseEntity.ok(tasks);
+    }
+
 }
 
 
