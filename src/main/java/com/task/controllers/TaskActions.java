@@ -90,14 +90,23 @@ public class TaskActions {
     }
 
     @DeleteMapping("/{id}/delete")
-    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
-        if (taskRepository.existsById(id)) {
+    public ResponseEntity<?> deleteTask(@RequestHeader("Authorization") String token, @PathVariable Long id) {
+        String email = "";
+        try {
+            email = jwtUtil.extractUsername(token.substring(7));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
+        }
+        Users user = userRepository.findByEmail(email);
+        ListObject listObject = taskRepository.findById(id).get();
+        if (taskRepository.existsById(id) && (user.getId() == listObject.getUser().getId()||user.getRole().equals("ADMIN"))) {
             taskRepository.deleteById(id);
             return ResponseEntity.noContent().build(); // 204 No Content
         } else {
             return ResponseEntity.notFound().build(); // 404 Not Found
         }
     }
+
     @GetMapping("/taskView")
     public ResponseEntity<?> getTasks(@RequestHeader("Authorization") String token) {
         String email = "";
