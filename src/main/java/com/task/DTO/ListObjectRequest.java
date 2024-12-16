@@ -15,6 +15,14 @@ public class ListObjectRequest {
     private int minutes;
     private Users user;
 
+    public ListObjectRequest(String title, String description, int priority, String status, LocalDateTime startTime) {
+        this.title = title;
+        this.description = description;
+        this.priority = priority;
+        this.status = status;
+        this.startTime = startTime;
+
+    }
     public Users getUser() {
         return user;
     }
