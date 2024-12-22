@@ -23,8 +23,7 @@ public class Users {
     private String email;
     @Column(unique = true, nullable = false)
     private String phone;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ListObject> user_list = new ArrayList<>();
+
     private boolean enabled;
     @Column(unique = false, nullable = false)
     private String role;
