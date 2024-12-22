@@ -1,24 +1,19 @@
-package com.task.Service;
+package com.todolist.Service;
 
-import com.task.DTO.UserDto;
-import com.task.entities.Users;
-import com.task.exceptions.UserAlreadyExistException;
-import com.task.repositories.UserRepository;
+import com.todolist.commonmodule.DTO.UserDto;
+import com.todolist.commonmodule.entities.Users;
+import com.todolist.commonmodule.repositories.UserRepository;
+import com.todolist.commonmodule.security.exceptions.UserAlreadyExistException;
 import jakarta.transaction.Transactional;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Arrays;
-import java.util.Collections;
 
 @Service
 @Transactional
 public class UserService implements IUserService {
     @Autowired
-    private PasswordEncoder passwordEncoder;  // הוספת BCryptPasswordEncoder
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserRepository repository;
