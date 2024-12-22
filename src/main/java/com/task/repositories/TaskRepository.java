@@ -12,9 +12,9 @@ import java.util.List;
 @Repository
 public interface TaskRepository extends JpaRepository<ListObject, Long> {
     ListObject findByTitle(String title);
-    @Query("SELECT new com.task.DTO.ListObjectRequest(l.title, l.description, l.m_priority, l.status, l.startTime) " +
-            "FROM ListObject l WHERE l.user.id = :userId")
-    List<ListObjectRequest> findByUserId(@Param("userId") Long userId);
+    @Query("SELECT l FROM ListObject l WHERE l.user_id = :userId")
+    List<ListObject> findByUserId(@Param("userId") long userId);
+
     ListObject findByTitleAndDescription(String title, String description);
 
     ListObject findByDescriptionAndTitle(String description, String title);
