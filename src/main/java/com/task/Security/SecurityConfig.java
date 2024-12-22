@@ -43,9 +43,9 @@ public class SecurityConfig {
                 .csrf().disable()
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/user/login","/api/tasks/taskView").permitAll()
+                        .requestMatchers("/api/user/login","/api/tasks/taskView","/api/user/registerNewUserAccount").permitAll()
                         .requestMatchers("/api/user/**").hasRole("USER")
-                        .requestMatchers("/api/tasks/createByAdmin").hasRole("ADMIN")
+                        .requestMatchers("/api/tasks/createByAdmin","api/user/{id}/deleteUser").hasRole("ADMIN")
                         .requestMatchers("/api/tasks/create", "/api/tasks/{id}/editStatus","/api/tasks/{id}/delete","/api/user/registerNewUserAccount").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()
                 )
