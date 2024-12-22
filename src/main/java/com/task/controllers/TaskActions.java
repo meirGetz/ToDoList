@@ -49,7 +49,7 @@ public class TaskActions {
         listObject.setStartTime(request.getStartTime());
         listObject.setPriority(request.getPriority());
         listObject.setStatus(request.getStatus() != null ? request.getStatus() : "Pending");
-        listObject.setUser(user);
+        listObject.setUserId(user.getId());
 
         listObject.setEndTime(request.getStartTime(), request.getDays(), request.getHours(), request.getMinutes());
 
@@ -61,7 +61,7 @@ public class TaskActions {
     public void createTaskByAdmin(@RequestBody ListObjectRequest request) {
         ListObject listObject = new ListObject();
 
-        Users user = userRepository.findById(request.getUser().getId())
+        Users user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         listObject.setTitle(request.getTitle());
@@ -69,7 +69,7 @@ public class TaskActions {
         listObject.setStartTime(request.getStartTime());
         listObject.setPriority(request.getPriority());
         listObject.setStatus(request.getStatus() != null ? request.getStatus() : "Pending");
-        listObject.setUser(user);
+        listObject.setUserId(user.getId());
 
         listObject.setEndTime(request.getStartTime(), request.getDays(), request.getHours(), request.getMinutes());
 
@@ -88,7 +88,7 @@ public class TaskActions {
         Users user = userRepository.findByEmail(email);
         ListObject listObject = taskRepository.findById(id).get();
 //        Optional<ListObject> object = taskRepository.findById(id);
-        if (taskRepository.existsById(id) && (user.getId() == listObject.getUser().getId()||user.getRole().equals("ADMIN"))) {
+        if (taskRepository.existsById(id) && (user.getId() == listObject.getUserId()||user.getRole().equals("ADMIN"))) {
 //            ListObject listObject = object.get();
             listObject.setStatus(request.getStatus());
             taskRepository.save(listObject);
@@ -107,7 +107,7 @@ public class TaskActions {
         }
         Users user = userRepository.findByEmail(email);
         ListObject listObject = taskRepository.findById(id).get();
-        if (taskRepository.existsById(id) && (user.getId() == listObject.getUser().getId()||user.getRole().equals("ADMIN"))) {
+        if (taskRepository.existsById(id) && (user.getId() == listObject.getUserId()||user.getRole().equals("ADMIN"))) {
             taskRepository.deleteById(id);
             return ResponseEntity.noContent().build(); // 204 No Content
         } else {
@@ -129,7 +129,7 @@ public class TaskActions {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
 
-        List<ListObjectRequest> tasks = taskRepository.findByUserId(user.getId());
+        List<ListObject> tasks = taskRepository.findByUserId(user.getId());
         if (tasks.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
