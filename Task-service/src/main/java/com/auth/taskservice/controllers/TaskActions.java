@@ -1,22 +1,18 @@
-package com.task.controllers;
+package com.auth.taskservice.controllers;
 
-import com.task.DTO.ListObjectRequest;
-import com.task.Security.JwtUtil;
-import com.task.entities.ListObject;
-//import com.task.entities.TaskTable;
-import com.task.entities.Users;
-import com.task.repositories.TaskRepository;
-//import com.task.repositories.TaskTableRepository;
-import com.task.repositories.UserRepository;
+import com.todolist.commonmodule.DTO.ListObjectRequest;
+import com.todolist.commonmodule.entities.ListObject;
+import com.todolist.commonmodule.entities.Users;
+import com.todolist.commonmodule.repositories.TaskRepository;
+import com.todolist.commonmodule.repositories.UserRepository;
+import com.todolist.commonmodule.security.Security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/tasks")
@@ -87,9 +83,7 @@ public class TaskActions {
         }
         Users user = userRepository.findByEmail(email);
         ListObject listObject = taskRepository.findById(id).get();
-//        Optional<ListObject> object = taskRepository.findById(id);
-        if (taskRepository.existsById(id) && (user.getId() == listObject.getUser().getId()||user.getRole().equals("ADMIN"))) {
-//            ListObject listObject = object.get();
+        if (taskRepository.existsById(id) && (Objects.equals(user.getId(), listObject.getUser().getId()) ||user.getRole().equals("ADMIN"))) {
             listObject.setStatus(request.getStatus());
             taskRepository.save(listObject);
             return ResponseEntity.ok(listObject);
