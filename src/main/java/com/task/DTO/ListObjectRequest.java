@@ -13,7 +13,7 @@ public class ListObjectRequest {
     private int days;
     private int hours;
     private int minutes;
-    private Users user;
+    private long user_id;
 
     public ListObjectRequest(String title, String description, int priority, String status, LocalDateTime startTime) {
         this.title = title;
@@ -23,11 +23,11 @@ public class ListObjectRequest {
         this.startTime = startTime;
 
     }
-    public Users getUser() {
-        return user;
+    public long getUserId() {
+        return user_id;
     }
-    public void setUser(Users user) {
-        this.user = user;
+    public void setUserId(long user_id) {
+        this.user_id = user_id;
     }
     public String getTitle() {
         return title;
