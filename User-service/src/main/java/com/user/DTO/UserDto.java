@@ -1,4 +1,4 @@
-package com.task.DTO;
+package com.user.DTO;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

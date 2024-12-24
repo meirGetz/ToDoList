@@ -1,6 +1,6 @@
-package com.task.Service;
-import com.task.DTO.UserDto;
-import com.task.entities.Users;
+package com.user.Service;
+import com.user.DTO.UserDto;
+import com.user.entities.Users;
 import org.apache.catalina.User;
 
 public interface IUserService {

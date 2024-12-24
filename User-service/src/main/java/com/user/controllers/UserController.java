@@ -1,25 +1,30 @@
-package com.task.controllers;
+package com.user.controllers;
 
-import com.task.DTO.UserDto;
-import com.task.LoginRequest;
-import com.task.Security.CustomUserDetailsService;
-import com.task.Security.JwtUtil;
-import com.task.Service.UserService;
-import com.task.entities.Users;
+import com.user.DTO.UserDto;
+import com.user.DTO.LoginRequest;
+import com.user.auth.Security.CustomUserDetailsService;
+import com.user.auth.Security.JwtUtil;
+import com.user.Service.UserService;
+import com.user.entities.Users;
+import com.user.repositories.UserRepository;
 import org.apache.catalina.User;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.bind.annotation.*;
-import com.task.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -39,23 +44,7 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
         this.userDetailsService = userDetailsService;
     }
-//
-//    @PostMapping("/registerNewUserAccount")
-//    public ResponseEntity<Users> createUser(@RequestParam String firstName,
-//                                            @RequestParam String lastName,
-//                                            @RequestParam String email,
-//                                            @RequestParam String phone,
-//                                            @RequestParam String password) {
-//        Users user = new Users();
-//        user.setUsername(firstName + " " + lastName);
-//        String encryptedPassword = passwordEncoder.encode(password);
-//        user.setPassword(encryptedPassword);
-//        user.setEmail(email);
-//        user.setPhone(phone);
-//        user.setRoles(Collections.singletonList("USER"));
-//        userRepository.save(user);
-//        return ResponseEntity.ok(user);
-//    }
+
 @PostMapping("/registerNewUserAccount")
 public ResponseEntity<Users> createUser(@RequestBody Users user) {
     try {
@@ -80,10 +69,25 @@ public ResponseEntity<Users> createUser(@RequestBody Users user) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
 
+        List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
+
+        // יצירת אובייקט User מ-Spring Security
+        org.springframework.security.core.userdetails.User springUser =
+                new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
+
+        // יצירת authenticationToken
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(springUser, null, authorities);
+
+        // עדכון ה-SecurityContext עם המשתמש שנכנס
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+        // יצירת הטוקן
         String token = jwtUtil.generateToken(user.getEmail());
 
         return ResponseEntity.ok(Collections.singletonMap("token", token));
     }
+
 
 
 

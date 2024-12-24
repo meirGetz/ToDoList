@@ -1,4 +1,4 @@
-package com.task.Security;
+package com.user.auth.Security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -50,8 +50,8 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
 
-                .authenticationProvider(authenticationProvider()) 
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); 
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

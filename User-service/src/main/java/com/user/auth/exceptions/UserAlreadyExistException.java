@@ -1,4 +1,4 @@
-package com.task.exceptions;
+package com.user.auth.exceptions;
 
 public class UserAlreadyExistException extends RuntimeException {
 

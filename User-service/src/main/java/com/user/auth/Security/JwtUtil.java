@@ -1,4 +1,4 @@
-package com.task.Security;
+package com.user.auth.Security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.stereotype.Component;
@@ -10,7 +10,7 @@ import java.util.function.Function;
 public class JwtUtil {
 
     private final String secretKey = "abcdefghijklmnopqrstuvwxyztuvwxyz1234567890";
-    private final long expirationTime = 1000 * 60 * 60; 
+    private final long expirationTime = 1000 * 60 * 60;
 
     // יצירת הטוקן
     public String generateToken(String email) {

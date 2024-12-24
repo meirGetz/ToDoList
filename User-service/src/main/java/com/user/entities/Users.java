@@ -1,4 +1,4 @@
-package com.task.entities;
+package com.user.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
