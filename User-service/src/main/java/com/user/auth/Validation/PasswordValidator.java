@@ -1,4 +1,4 @@
-package com.task.Validation;
+package com.user.auth.Validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -6,8 +6,7 @@ import jakarta.validation.ConstraintValidatorContext;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PasswordValidator
-        implements ConstraintValidator<ValidPassword, String> {
+public class PasswordValidator implements ConstraintValidator<ValidPassword, String> {
 
     private Pattern pattern;
     private Matcher matcher;

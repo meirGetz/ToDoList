@@ -1,6 +1,6 @@
-package com.task.Validation;
+package com.user.auth.Validation;
 
-import com.task.Validation.PasswordValidator;
+import com.user.auth.Validation.PasswordValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
