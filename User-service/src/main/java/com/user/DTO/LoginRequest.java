@@ -1,4 +1,4 @@
-package com.task;
+package com.user.DTO;
 public class LoginRequest {
     private String email;
     private String password;

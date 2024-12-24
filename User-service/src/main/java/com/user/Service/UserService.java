@@ -1,9 +1,9 @@
-package com.task.Service;
+package com.user.Service;
 
-import com.task.DTO.UserDto;
-import com.task.entities.Users;
-import com.task.exceptions.UserAlreadyExistException;
-import com.task.repositories.UserRepository;
+import com.user.DTO.UserDto;
+import com.user.entities.Users;
+import com.user.auth.exceptions.UserAlreadyExistException;
+import com.user.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
