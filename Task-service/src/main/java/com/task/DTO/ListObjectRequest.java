@@ -1,6 +1,8 @@
 package com.task.DTO;
 
 
+import com.task.note.entities.Note;
+
 import java.time.LocalDateTime;
 
 public class ListObjectRequest {
@@ -9,25 +11,29 @@ public class ListObjectRequest {
     private int priority;
     private String status = "Pending";
     private LocalDateTime startTime; // נשתמש במחרוזת לפשטות
+    private LocalDateTime endTime; // נשתמש במחרוזת לפשטות
     private int days;
     private int hours;
     private int minutes;
     private long user_id;
 
-    public ListObjectRequest(String title, String description, int priority, String status, LocalDateTime startTime) {
+
+    public ListObjectRequest(String title, String description, int priority, String status, LocalDateTime startTime, Note note) {
         this.title = title;
         this.description = description;
         this.priority = priority;
         this.status = status;
         this.startTime = startTime;
-
     }
+
     public long getUserId() {
         return user_id;
     }
+
     public void setUserId(long user_id) {
         this.user_id = user_id;
     }
+
     public String getTitle() {
         return title;
     }
@@ -54,6 +60,9 @@ public class ListObjectRequest {
 
     public LocalDateTime getStartTime() {
         return startTime;
+    }
+    public LocalDateTime getEndTime() {
+        return endTime;
     }
 
     public void setStartTime(LocalDateTime startTime) {
