@@ -45,8 +45,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/user/login","/api/tasks/taskView","/api/user/registerNewUserAccount").permitAll()
                         .requestMatchers("/api/user/**").hasRole("USER")
-                        .requestMatchers("/api/tasks/createByAdmin","api/user/{id}/deleteUser").hasRole("ADMIN")
-                        .requestMatchers("/api/tasks/create", "/api/tasks/{id}/editStatus","/api/tasks/{id}/delete","/api/user/registerNewUserAccount").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/tasks/createByAdmin","/api/notes/createByAdmin","api/user/{id}/deleteUser").hasRole("ADMIN")
+                        .requestMatchers("/api/tasks/create","api/notes/{id}/{data}/Edit","api/tasks/{id}/{data}/Edit","/api/notes/create", "/api/tasks/{id}/editStatus","/api/tasks/{id}/delete","/api/user/registerNewUserAccount","api/user/logout").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()
                 )
 
