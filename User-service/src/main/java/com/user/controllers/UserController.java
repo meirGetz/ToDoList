@@ -75,22 +75,15 @@ public ResponseEntity<Users> createUser(@RequestBody Users user) {
         org.springframework.security.core.userdetails.User springUser =
                 new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
 
-        // יצירת authenticationToken
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(springUser, null, authorities);
 
-        // עדכון ה-SecurityContext עם המשתמש שנכנס
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-        // יצירת הטוקן
         String token = jwtUtil.generateToken(user.getEmail());
 
         return ResponseEntity.ok(Collections.singletonMap("token", token));
     }
-
-
-
-
 
     @PatchMapping("/{id}/changePassword")
     public ResponseEntity<Users> changePassword(@PathVariable Long id, @RequestBody Users request) {
@@ -113,4 +106,5 @@ public ResponseEntity<Users> createUser(@RequestBody Users user) {
             return ResponseEntity.notFound().build();
         }
     }
+
 }
