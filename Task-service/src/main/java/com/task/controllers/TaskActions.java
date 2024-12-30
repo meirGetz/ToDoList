@@ -74,9 +74,8 @@ public class TaskActions {
         taskRepository.save(listObject);
     }
 
-
-    @PatchMapping("/{id}/editStatus")
-    public ResponseEntity<?> changeStatus(@RequestHeader("Authorization") String token, @PathVariable Long id, @RequestBody ListObjectRequest request) {
+    @PatchMapping("/{id}/{data}/Edit")
+    public ResponseEntity<?> edit(@RequestHeader("Authorization") String token, @PathVariable Long id, @PathVariable String data, @RequestBody ListObjectRequest request) {
         String email = "";
         try {
             email = jwtUtil.extractUsername(token.substring(7));
@@ -85,13 +84,27 @@ public class TaskActions {
         }
         Users user = userRepository.findByEmail(email);
         ListObject listObject = taskRepository.findById(id).get();
-        if (taskRepository.existsById(id) && (user.getId() == listObject.getUserId()||user.getRole().equals("ADMIN"))) {
-            listObject.setStatus(request.getStatus());
+        if (taskRepository.existsById(id) && (user.getId() == listObject.getUserId() || user.getRole().equals("ADMIN"))) {
+            switch (data) {
+                case "Title":
+                    listObject.setTitle(request.getTitle());
+                    break;
+                case "Description":
+                    listObject.setDescription(request.getDescription());
+                    break;
+                case "Status":
+                    listObject.setStatus(request.getStatus());
+                    break;
+                case "Time":
+                    listObject.setStartTime(request.getStartTime());
+                    listObject.setEndTime(request.getStartTime(),request.getEndTime());
+            }
             taskRepository.save(listObject);
             return ResponseEntity.ok(listObject);
         }
         return ResponseEntity.notFound().build();
     }
+
 
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<?> deleteTask(@RequestHeader("Authorization") String token, @PathVariable Long id) {
@@ -103,7 +116,7 @@ public class TaskActions {
         }
         Users user = userRepository.findByEmail(email);
         ListObject listObject = taskRepository.findById(id).get();
-        if (taskRepository.existsById(id) && (user.getId() == listObject.getUserId()||user.getRole().equals("ADMIN"))) {
+        if (taskRepository.existsById(id) && (user.getId() == listObject.getUserId() || user.getRole().equals("ADMIN"))) {
             taskRepository.deleteById(id);
             return ResponseEntity.noContent().build(); // 204 No Content
         } else {
