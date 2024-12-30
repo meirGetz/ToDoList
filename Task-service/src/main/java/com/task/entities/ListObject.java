@@ -1,15 +1,16 @@
 package com.task.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.task.note.entities.Note;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import org.apache.catalina.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "list_objects")
@@ -32,12 +33,16 @@ public class ListObject {
     @NotBlank(message = "Pending")
     private String status = "Pending";
 
-
     private long user_id;
 
-
     private LocalDateTime startTime;
+
     private LocalDateTime endTime;
+
+    @OneToMany(mappedBy = "listObject", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Note> notes;
+
 
     public ListObject() {
     }
@@ -45,9 +50,11 @@ public class ListObject {
     public long getUserId() {
         return user_id;
     }
+
     public void setUserId(long user_id) {
         this.user_id = user_id;
     }
+
     public String getTitle() {
         return this.title;
     }
@@ -66,6 +73,14 @@ public class ListObject {
 
     public LocalDateTime getEndTime() {
         return this.endTime;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public void setTitle(String title) {
@@ -88,18 +103,31 @@ public class ListObject {
         this.endTime = startTime.plusDays(days).plusHours(hours).plusMinutes(minutes);
     }
 
-    public String getStatus(){
-        return this.status;
-    }
-    public void setStatus(String status){
-        this.status = status;
-    }
-    public void setId(Long id) {
-        this.id = id;
+    public void setEndTime(LocalDateTime startTime, LocalDateTime endTime) {
+        if (endTime.isBefore(startTime)) {
+            this.endTime = startTime;
+            return;
+        }
+        else {
+            this.endTime = endTime;
+        }
     }
 
-    public Long getId() {
-        return id;
+
+    public String getStatus() {
+        return this.status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public List<Note> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
     }
 
 }
