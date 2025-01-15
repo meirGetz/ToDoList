@@ -52,6 +52,7 @@
     <modules>
         <module>User-service</module>
         <module>Task-service</module>
+        <module>Common-module</module>
     </modules>
     <build>
         <plugins>
