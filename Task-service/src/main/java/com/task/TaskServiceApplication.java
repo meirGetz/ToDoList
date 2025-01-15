@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 
 @EnableJpaRepositories(basePackages = {"com.task.repositories", "com.task.note.repositories"})
-@EntityScan(basePackages = {"com.task.entities","com.task.note.entities"})
-@SpringBootApplication(scanBasePackages = {"com.task", "com.user", "com.task.note"})
+@EntityScan(basePackages = {"com.task.entities","com.task.note.entities", "com.DTO"})
+@SpringBootApplication(scanBasePackages = {"com.task", "com.task.note"})
 public class TaskServiceApplication {
 
     public static void main(String[] args) {
