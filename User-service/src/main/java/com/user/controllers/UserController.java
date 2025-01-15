@@ -1,22 +1,18 @@
 package com.user.controllers;
 
-import com.user.DTO.UserDto;
-import com.user.DTO.LoginRequest;
+import com.DTO.LoginRequest;
+import com.DTO.UserDto;
 import com.user.auth.Security.CustomUserDetailsService;
 import com.user.auth.Security.JwtUtil;
 import com.user.Service.UserService;
 import com.user.entities.Users;
 import com.user.repositories.UserRepository;
-import org.apache.catalina.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.ui.Model;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -84,7 +80,98 @@ public ResponseEntity<Users> createUser(@RequestBody Users user) {
 
         return ResponseEntity.ok(Collections.singletonMap("token", token));
     }
+    @GetMapping("/validate")
+    public ResponseEntity<?> validateToken(@RequestHeader("Authorization") String token) {
+        try {
+            System.out.println("in validate -"+token+"-");
 
+            System.out.println(token);
+            String jwt = token.substring(7); // הסרת "Bearer "
+            System.out.println("remove Bearer -"+token+"-");
+
+            System.out.println("jwt="+jwt);
+            if (jwtUtil.validateToken(jwt)) {
+                return ResponseEntity.ok(Collections.singletonMap("valid", true));
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token validation failed");
+        }
+    }
+
+
+    @GetMapping("/getUser/{email}")
+    public ResponseEntity<?> getUserByEmail(@PathVariable String email) {
+        System.out.println("Im in /getUser/{email}");
+        Users user = userRepository.findByEmail(email);
+        System.out.println("User phon is : "+user.getPhone());
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found 2* email");
+        }
+        System.out.println("UserDto ans_user = new UserDto();");
+        // יצירת אובייקט UserDto
+        UserDto ans_user = new UserDto();
+        ans_user.setId(user.getId());
+        ans_user.setFirstName(user.getUsername());
+        ans_user.setLastName(user.getUsername());
+        ans_user.setEmail(user.getEmail());
+        ans_user.setPhone(user.getPhone());
+        ans_user.setRole(user.getRole());
+        ans_user.setPassword(null);
+        ans_user.setMatchingPassword(null);
+        System.out.println("return ResponseEntity.ok(ans_user);");
+        return ResponseEntity.ok(ans_user);
+    }
+
+    @GetMapping("/getUserId")
+    public ResponseEntity<?> getUserId(@RequestHeader("Authorization") String token) {
+        System.out.println("1  GetMapping(\"/userId\") -"+token+"-");
+
+        try {
+            System.out.println("2 GetMapping(\"/userId\") -"+token+"-");
+
+            String jwt = token.substring(7); // הסרת "Bearer " מה-token
+
+            if (jwtUtil.validateToken(jwt)) {
+                String email = jwtUtil.extractUsername(jwt); // חילוץ ה-email מה-token
+                System.out.println("@GetMapping(\"/email\") email ==  -"+email+"-");
+                Users user = userRepository.findByEmail(email);
+                System.out.println("userRepository.findByEmail(email).getId() ==  -"+userRepository.findByEmail(email).getId()+"-");
+
+                if (user == null) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+                }
+                return ResponseEntity.ok( user.getId());
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token validation failed");
+        }
+    }
+
+    @GetMapping("/get-email")
+    public ResponseEntity<?> getEmailFromToken(@RequestHeader("Authorization") String token) {
+        System.out.println("1  GetMapping(\"/email\") -"+token+"-");
+
+        try {
+            System.out.println("2 GetMapping(\"/email\") -"+token+"-");
+
+            String jwt = token.substring(7); // הסרת "Bearer " מה-token
+
+            if (jwtUtil.validateToken(jwt)) {
+                String email = jwtUtil.extractUsername(jwt); // חילוץ ה-email מה-token
+                System.out.println("@GetMapping(\"/email\") email ==  -"+email+"-");
+
+                return ResponseEntity.ok(email);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token validation failed");
+        }
+    }
     @PatchMapping("/{id}/changePassword")
     public ResponseEntity<Users> changePassword(@PathVariable Long id, @RequestBody Users request) {
         Optional<Users> object = userRepository.findById(id);

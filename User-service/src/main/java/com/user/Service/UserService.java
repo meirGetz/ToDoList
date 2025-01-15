@@ -1,18 +1,13 @@
 package com.user.Service;
 
-import com.user.DTO.UserDto;
+import com.DTO.UserDto;
 import com.user.entities.Users;
 import com.user.auth.exceptions.UserAlreadyExistException;
 import com.user.repositories.UserRepository;
 import jakarta.transaction.Transactional;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Arrays;
-import java.util.Collections;
 
 @Service
 @Transactional
