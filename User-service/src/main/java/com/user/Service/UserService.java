@@ -26,7 +26,7 @@ public class UserService implements IUserService {
         }
 
         Users user = new Users();
-        user.setUsername(userDto.getFirstName() + " " + userDto.getLastName());
+        user.setUsername(userDto.getUserName());
         String encryptedPassword = passwordEncoder.encode(userDto.getPassword());
         user.setPassword(encryptedPassword);
         user.setEmail(userDto.getEmail());
