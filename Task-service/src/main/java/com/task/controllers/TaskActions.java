@@ -54,12 +54,21 @@ public class TaskActions {
         String email = "";
         try {
             System.out.println(token);
+            if (!authService.validateToken(token.substring(7))) {
+                throw new IllegalArgumentException("Invalid or expired token");
+            }
             email = userService.getEmailFromToken(token.substring(7));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
         }
+        if (email == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("email Invalid or expired token");
+        }
 
-        UserDto user = userService.getUserByToken(token.substring(7)); // קריאה לשירות המשתמש
+        UserDto user = userService.getUserByToken(token.substring(7));
+        if(!user.getEmail().equals(email)){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("email not found");
+        }
         ListObject listObject = taskRepository.findById(id).orElse(null);
         if (listObject != null && (user.getId() == listObject.getUserId() || user.getRole().equals("ADMIN"))) {
             switch (data) {
@@ -88,7 +97,11 @@ public class TaskActions {
         String email = "";
         try {
             System.out.println(token);
+            if (!authService.validateToken(token.substring(7))) {
+                throw new IllegalArgumentException("Invalid or expired token");
+            }
             email = userService.getEmailFromToken(token.substring(7));
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
         }
@@ -107,6 +120,9 @@ public class TaskActions {
     public ResponseEntity<?> getTasks(@RequestHeader("Authorization") String token) {
         String email = "";
         try {
+            if (!authService.validateToken(token.substring(7))) {
+                throw new IllegalArgumentException("Invalid or expired token");
+            }
             email = userService.getEmailFromToken(token.substring(7));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");

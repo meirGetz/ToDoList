@@ -17,7 +17,7 @@ public class ListObjectRequest {
     private int minutes;
     private long user_id;
 
-
+    public ListObjectRequest(){}
     public ListObjectRequest(String title, String description, int priority, String status, LocalDateTime startTime, Note note) {
         this.title = title;
         this.description = description;
@@ -64,7 +64,19 @@ public class ListObjectRequest {
     public LocalDateTime getEndTime() {
         return endTime;
     }
+    public void setEndTime(LocalDateTime startTime, int days, int hours, int minutes) {
+        this.endTime = startTime.plusDays(days).plusHours(hours).plusMinutes(minutes);
+    }
 
+    public void setEndTime(LocalDateTime startTime, LocalDateTime endTime) {
+        if (endTime.isBefore(startTime)) {
+            this.endTime = startTime;
+            return;
+        }
+        else {
+            this.endTime = endTime;
+        }
+    }
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }

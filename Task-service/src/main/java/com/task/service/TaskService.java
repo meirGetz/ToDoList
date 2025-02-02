@@ -15,9 +15,4 @@ public class TaskService {
         this.restTemplate = restTemplate;
     }
 
-//    public UserDto fetchUserDetails(Long userId) {
-//        String userServiceUrl = "http://localhost:8081/api/user" + userId;  // כתובת ה-URL לשירות ה-UserService
-//        ResponseEntity<UserDto> response = restTemplate.getForEntity(userServiceUrl, UserDto.class);  // קריאה והמרה ל-DTO
-//        return response.getBody();  // החזרת ה-DTO
-//    }
 }
