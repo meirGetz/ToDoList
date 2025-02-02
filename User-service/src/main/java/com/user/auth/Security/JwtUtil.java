@@ -12,7 +12,6 @@ public class JwtUtil {
     private final String secretKey = "abcdefghijklmnopqrstuvwxyztuvwxyz1234567890";
     private final long expirationTime = 1000 * 60 * 60;
 
-    // יצירת הטוקן
     public String generateToken(String email) {
         return Jwts.builder()
                 .setSubject(email)
@@ -22,7 +21,7 @@ public class JwtUtil {
                 .compact();
     }
 
-    public String extractUsername(String token) {
+    public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
