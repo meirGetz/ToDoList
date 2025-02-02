@@ -11,7 +11,9 @@ public class PasswordValidator implements ConstraintValidator<ValidPassword, Str
     private Pattern pattern;
     private Matcher matcher;
     private static final String PASSWORD_PATTERN =
-            "^(?=.*[A-Z])(?=.*[a-z])(?=.*[@#$%^&+=!])(?=.*[0-9]).{8,}$";
+            "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[@#$%^&+=!]).{8,}$";
+
+
 
     @Override
     public void initialize(ValidPassword constraintAnnotation) {
@@ -23,6 +25,7 @@ public class PasswordValidator implements ConstraintValidator<ValidPassword, Str
     }
 
     private boolean validatePassword(String password) {
+        System.out.println("Validating password: " + password);  // הדפסת הסיסמה
         pattern = Pattern.compile(PASSWORD_PATTERN);
         matcher = pattern.matcher(password);
         return matcher.matches();
