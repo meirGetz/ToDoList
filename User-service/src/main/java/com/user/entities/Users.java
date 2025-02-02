@@ -1,6 +1,10 @@
 package com.user.entities;
 
+import com.DTO.UserDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.user.auth.Validation.ValidEmail;
+import com.user.auth.Validation.ValidPassword;
+import com.user.auth.Validation.ValidPhoneNumber;
 import jakarta.persistence.*;
 
 import javax.management.relation.Role;
@@ -17,10 +21,14 @@ public class Users {
 
     @Column(unique = true, nullable = false)
     private String username;
+    @ValidPassword
     @Column(unique = false, nullable = false)
     private String password;
+
+    @ValidEmail
     @Column(unique = true, nullable = false)
     private String email;
+    @ValidPhoneNumber
     @Column(unique = true, nullable = false)
     private String phone;
 
@@ -67,6 +75,15 @@ public class Users {
     }
     public String getPhone() {
         return phone;
+    }
+
+    public void copyFromDto(UserDto dto) {
+        this.setId(dto.getId());
+        this.setEmail(dto.getEmail());
+        this.setPhone(dto.getPhone());
+        this.setPassword(dto.getPassword());
+        this.setRole(dto.getRole());
+        this.setUsername(dto.getUserName());
     }
 
 }
