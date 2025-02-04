@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 public class NotesRequest {
     private String title;
     private String description;
-    private LocalDateTime sendTime; // נשתמש במחרוזת לפשטות
+    private LocalDateTime sendTime;
     private long user_id;
     private long task_id;
 

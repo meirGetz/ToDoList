@@ -65,7 +65,7 @@ public class TaskControllerTest {
         existingTask.setTitle("Original Title");
         existingTask.setDescription("Original Description");
         existingTask.setStatus("Pending");
-        existingTask.setUserId(1L); // משתמש בעל id 1
+        existingTask.setUserId(1L);
 
         testUser = new UserDto();
         testUser.setId(1L);
@@ -79,7 +79,6 @@ public class TaskControllerTest {
     @Test
     @Order(1)
     public void testEditTitle_Success() throws Exception {
-        // מדמה שהטוקן תקף והמשתמש מורשה
         when(authService.validateToken(anyString())).thenReturn(true);
         when(userService.getEmailFromToken(anyString())).thenReturn("user@example.com");
         when(userService.getUserByToken(anyString())).thenReturn(testUser);
@@ -94,7 +93,6 @@ public class TaskControllerTest {
     @Test
     @Order(2)
     public void testEditDescription_Success() throws Exception {
-        // מדמה שהטוקן תקף והמשתמש מורשה
         when(authService.validateToken(anyString())).thenReturn(true);
         when(userService.getEmailFromToken(anyString())).thenReturn("user@example.com");
         when(userService.getUserByToken(anyString())).thenReturn(testUser);
@@ -109,7 +107,6 @@ public class TaskControllerTest {
     @Test
     @Order(3)
     public void testEditStatus_Success() throws Exception {
-        // מדמה שהטוקן תקף והמשתמש מורשה
         when(authService.validateToken(anyString())).thenReturn(true);
         when(userService.getEmailFromToken(anyString())).thenReturn("user@example.com");
         when(userService.getUserByToken(anyString())).thenReturn(testUser);
@@ -124,7 +121,6 @@ public class TaskControllerTest {
     @Test
     @Order(4)
     public void testEditTime_Success() throws Exception {
-        // מדמה שהטוקן תקף והמשתמש מורשה
         when(authService.validateToken(anyString())).thenReturn(true);
         when(userService.getEmailFromToken(anyString())).thenReturn("user@example.com");
         when(userService.getUserByToken(anyString())).thenReturn(testUser);
@@ -149,7 +145,6 @@ public class TaskControllerTest {
     @Test
     @Order(6)
     public void testEdit_UnauthorizedUser() throws Exception {
-        // מדמה שהטוקן תקף אבל המשתמש לא מורשה לערוך את המשימה
         when(authService.validateToken(anyString())).thenReturn(true);
         when(userService.getEmailFromToken(anyString())).thenReturn("user@example.com");
         UserDto testUser2 = new UserDto();
@@ -170,7 +165,6 @@ public class TaskControllerTest {
     @Test
     @Order(7)
     public void testEdit_TaskNotFound() throws Exception {
-        // מדמה שהמשימה לא נמצאה
         when(authService.validateToken(anyString())).thenReturn(true);
         when(userService.getEmailFromToken(anyString())).thenReturn("user@example.com");
         when(userService.getUserByToken(anyString())).thenReturn(testUser);
@@ -185,7 +179,6 @@ public class TaskControllerTest {
     public void testCreateTask() throws Exception {
         String fakeToken = "Bearer faketoken123";
 
-        // הגדר את ההתנהגות של AuthService ו-UserService
         when(authService.validateToken(anyString())).thenReturn(true);
         when(userService.getUserId(anyString())).thenReturn(1L);
 
@@ -198,7 +191,6 @@ public class TaskControllerTest {
     @Test
     @Order(9)
     public void testDeleteTask_Success() throws Exception {
-        // מדמה שהטוקן תקף והמשתמש מורשה
         when(authService.validateToken(anyString())).thenReturn(true);
         when(userService.getEmailFromToken(anyString())).thenReturn("user@example.com");
         when(userService.getUserByToken(anyString())).thenReturn(testUser);
@@ -211,7 +203,6 @@ public class TaskControllerTest {
     @Test
     @Order(10)
     public void testDeleteTask_TaskNotFound() throws Exception {
-        // מדמה שהמשימה לא נמצאה
         when(authService.validateToken(anyString())).thenReturn(true);
         when(userService.getEmailFromToken(anyString())).thenReturn("user@example.com");
         when(userService.getUserByToken(anyString())).thenReturn(testUser);
@@ -224,11 +215,10 @@ public class TaskControllerTest {
     @Test
     @Order(11)
     public void testDeleteTask_UnauthorizedUser() throws Exception {
-        // מדמה שהטוקן תקף אבל המשתמש לא מורשה למחוק את המשימה
         when(authService.validateToken(anyString())).thenReturn(true);
         when(userService.getEmailFromToken(anyString())).thenReturn("user@example.com");
         UserDto testUser2 = new UserDto();
-        testUser2.setId(2L); // משתמש אחר
+        testUser2.setId(2L);
         testUser2.setUsername("meir2");
         testUser2.setPhone("0446622249");
         testUser2.setEmail("user2@example.com");
@@ -254,7 +244,6 @@ public class TaskControllerTest {
     @Test
     @Order(13)
     public void testGetTasks_Success() throws Exception {
-        // מדמה שהטוקן תקף והמשתמש מורשה
         when(authService.validateToken(anyString())).thenReturn(true);
         when(userService.getEmailFromToken(anyString())).thenReturn("user@example.com");
         when(userService.getUserId(anyString())).thenReturn(1L);
@@ -269,7 +258,6 @@ public class TaskControllerTest {
     @Test
     @Order(14)
     public void testGetTasks_NoTasksFound() throws Exception {
-        // מדמה שהטוקן תקף אבל אין משימות למשתמש
         when(authService.validateToken(anyString())).thenReturn(true);
         when(userService.getEmailFromToken(anyString())).thenReturn("user@example.com");
         when(userService.getUserId(anyString())).thenReturn(1L);
@@ -282,7 +270,6 @@ public class TaskControllerTest {
     @Test
     @Order(15)
     public void testGetTasks_InvalidToken() throws Exception {
-        // מדמה שהטוקן לא תקף
         when(authService.validateToken(anyString())).thenReturn(false);
 
         ResponseEntity<?> response = taskActions.getTasks(fakeToken);

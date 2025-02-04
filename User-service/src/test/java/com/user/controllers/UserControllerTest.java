@@ -81,7 +81,6 @@ public void testCreateUser() {
     @Test
     @Order(2)
     public void testLoginUser_Success() {
-        // Arrange
         Users loginRequest = new Users();
         loginRequest.setEmail("test@example.com");
         loginRequest.setPassword("password");
@@ -91,15 +90,10 @@ public void testCreateUser() {
         user.setPassword("encodedPassword");
         user.setRole("USER");
 
-        // Mocking
         when(userRepository.findByEmail(anyString())).thenReturn(user);
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
         when(jwtUtil.generateToken(anyString())).thenReturn("jwtToken"); // Mock עבור generateToken
-
-        // Act
         ResponseEntity<?> response = userController.login(loginRequest);
-
-        // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("jwtToken", ((java.util.Map<?, ?>) response.getBody()).get("token"));
     }
@@ -111,11 +105,7 @@ public void testCreateUser() {
     public void testLoginUser_InvalidCMail() {
         user.copyFromDto(testUser);
         user.setEmail("invalidgmail.com");
-
-        // When
         ResponseEntity<?> response = userController.login(user);
-
-        // Then
         assertEquals(401, response.getStatusCodeValue());
         assertEquals("Invalid credentials", response.getBody());
     }
@@ -125,12 +115,7 @@ public void testCreateUser() {
     public void testLoginUser_InvalidCPassword() {
         user.copyFromDto(testUser);
         user.setPassword(passwordEncoder.encode("password"));
-
-
-        // When
         ResponseEntity<?> response = userController.login(user);
-
-        // Then
         assertEquals(401, response.getStatusCodeValue());
         assertEquals("Invalid credentials", response.getBody());
     }
@@ -138,20 +123,15 @@ public void testCreateUser() {
     @Test
     @Order(5)
     public void testDeleteUser() {
-        // Given
-        Users userToDelete = new Users();  // יצירת משתמש למחיקה
-        userToDelete.setId(1L);  // הגדרת מזהה המשתמש
+        Users userToDelete = new Users();
+        userToDelete.setId(1L);
         userToDelete.setEmail("test@example.com");
 
-        // Mocking המחיקה מתוך ה-Repository
-        when(userRepository.existsById(userToDelete.getId())).thenReturn(true); // בדוק אם המשתמש קיים
-        doNothing().when(userRepository).deleteById(userToDelete.getId()); // בדוק שמבוצעת המחיקה
+        when(userRepository.existsById(userToDelete.getId())).thenReturn(true);
+        doNothing().when(userRepository).deleteById(userToDelete.getId());
 
-        // Performing the deletion through the controller
         ResponseEntity<Void> response = userController.deleteUser(userToDelete.getId());
 
-        // Then
-        // מאמתים שהתשובה חזרה עם סטטוס 204
         assertEquals(204, response.getStatusCodeValue());
 
         verify(userRepository, times(1)).deleteById(userToDelete.getId());
@@ -161,42 +141,29 @@ public void testCreateUser() {
     @Test
     @Order(6)
     public void testCreateUserInvalidPhone() {
-        // Given
         testUser.setPhone("000000000000");
 
         when(userRepository.save(any(Users.class))).thenThrow(new IllegalArgumentException("Invalid phone number"));
 
-        // When
         ResponseEntity<Users> response = userController.createUser(testUser);
 
-        // Then
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), response.getStatusCodeValue());
     }
     @Test
     @Order(7)
     public void testCreateUserInvalidPassword() {
-        // Given
         testUser.setPassword("password");
         when(userRepository.save(any(Users.class))).thenThrow(new IllegalArgumentException("Invalid password"));
-
-        // When
         ResponseEntity<Users> response = userController.createUser(testUser);
-
-        // Then
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), response.getStatusCodeValue());
     }
 
     @Test
     @Order(8)
     public void testCreateUserInvalidEmail() {
-        // Given
-        testUser.setEmail("testUser.com@"); // דוא"ל לא תקין
+        testUser.setEmail("testUser.com@");
         when(userRepository.save(any(Users.class))).thenThrow(new IllegalArgumentException("Invalid email"));
-
-        // When
         ResponseEntity<Users> response = userController.createUser(testUser);
-
-        // Then
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), response.getStatusCodeValue());
 
     }

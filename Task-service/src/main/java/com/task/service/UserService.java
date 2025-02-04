@@ -24,8 +24,7 @@ public class UserService {
         try {
             return restTemplate.getForObject(url, UserDto.class);
         } catch (Exception e) {
-            // טיפול בשגיאות, אפשר להוסיף לוגים או טיפול אחר במקרה של שגיאה
-            return null; // במקרה של שגיאה בהתקשרות
+            return null;
         }
     }
 
@@ -43,7 +42,7 @@ public class UserService {
             System.out.println("response getPhone = = = " + response.getBody().getPhone());
 
             System.out.println("response.getBody() = " + response.getBody());
-            return response.getBody(); // מחזיר את ה-email ישירות
+            return response.getBody();
         } catch (Exception e) {
             return null;
         }
@@ -58,7 +57,7 @@ public class UserService {
             ResponseEntity<String> response = restTemplate.exchange(
                     USER_SERVICE_URL + "/get-email", HttpMethod.GET, entity, String.class);
             System.out.println("response.getBody() = " + response.getBody());
-            return response.getBody(); // מחזיר את ה-email ישירות
+            return response.getBody();
         } catch (Exception e) {
             return null;
         }
@@ -86,13 +85,13 @@ public class UserService {
                     return userId;
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
-                    return (long)-1;  // או ערך אחר במקרה של שגיאה בהמרה
+                    return (long)-1;
                 }
             } else {
-                return (long) -1;  // במקרה שבו אין גוף בתגובה
+                return (long) -1;
             }
         } catch (Exception e) {
-            return (long)-1;  // במקרה של שגיאה כלשהי בתקשורת
+            return (long)-1;
         }
     }
 

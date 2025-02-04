@@ -6,8 +6,8 @@ import com.task.note.entities.Note;
 import com.task.note.repositories.NoteRepository;
 import com.task.entities.ListObject;
 import com.task.repositories.TaskRepository;
-import com.task.service.AuthService; // שירות האימות
-import com.task.service.UserService; // שירות המשתמש
+import com.task.service.AuthService;
+import com.task.service.UserService;
 import com.DTO.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,13 +25,13 @@ public class NoteControllers {
     @Autowired
     private NoteRepository noteRepository;
     @Autowired
-    private AuthService authService; // שירות האימות
+    private AuthService authService;
     @Autowired
-    private UserService userService; // שירות המשתמש
+    private UserService userService;
 
     @PostMapping("/create")
     public ResponseEntity<?> createNote(@RequestHeader("Authorization") String token, @RequestBody NotesRequest request) {
-        if (!authService.validateToken(token.substring(7))) { // הסר את "Bearer " מהכותרת
+        if (!authService.validateToken(token.substring(7))) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
         }
 
@@ -77,12 +77,12 @@ public class NoteControllers {
     public ResponseEntity<?> edit(@RequestHeader("Authorization") String token, @PathVariable Long id, @PathVariable String data, @RequestBody ListObjectRequest request) {
         String email = "";
         try {
-            email = userService.getEmailFromToken(token.substring(7)); // הוצא את ה-email אחרי אימות
+            email = userService.getEmailFromToken(token.substring(7));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
         }
 
-        UserDto user = userService.getUserByToken(token); // קריאה לשירות המשתמש
+        UserDto user = userService.getUserByToken(token);
         Note note = noteRepository.findById(id).orElse(null);
         if (note != null && (user.getId() == note.getUserId() || user.getRole().equals("ADMIN"))) {
             switch (data) {
@@ -103,12 +103,12 @@ public class NoteControllers {
     public ResponseEntity<?> deleteNote(@RequestHeader("Authorization") String token, @PathVariable Long id) {
         String email = "";
         try {
-            email = userService.getEmailFromToken(token.substring(7)); // הוצא את ה-email אחרי אימות
+            email = userService.getEmailFromToken(token.substring(7));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
         }
 
-        UserDto user = userService.getUserByToken(token); // קריאה לשירות המשתמש
+        UserDto user = userService.getUserByToken(token);
         Note note = noteRepository.findById(id).orElse(null);
         if (note != null && (user.getId() == note.getUserId() || user.getRole().equals("ADMIN"))) {
             noteRepository.deleteById(id);

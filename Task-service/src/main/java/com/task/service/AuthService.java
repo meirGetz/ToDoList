@@ -21,7 +21,6 @@ public class AuthService {
         HttpHeaders headers = new HttpHeaders();
         System.out.println("befor set -"+token+"-");
         headers.set("Authorization", "Bearer " + token);
-        // הוספת ה-Token לכותרת ה-HTTP
         System.out.println("after set -"+token+"-");
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
@@ -30,11 +29,11 @@ public class AuthService {
             System.out.println("\nUSER_SERVICE_URL+\"/validate\" -"+USER_SERVICE_URL+"/validate\n"+"-");
 
             restTemplate.exchange(USER_SERVICE_URL+"/validate", HttpMethod.GET, entity, String.class);
-            return true; // אם אין שגיאה, ה-token תקף
+            return true;
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
-            return false; // במקרה של שגיאה, ה-token לא תקף
+            return false;
 
         }
     }

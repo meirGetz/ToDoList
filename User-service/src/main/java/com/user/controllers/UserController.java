@@ -140,10 +140,10 @@ public class UserController {
         try {
             System.out.println("2 GetMapping(\"/userId\") -" + token + "-");
 
-            String jwt = token.substring(7); // הסרת "Bearer " מה-token
+            String jwt = token.substring(7);
 
             if (jwtUtil.validateToken(jwt)) {
-                String email = jwtUtil.extractEmail(jwt); // חילוץ ה-email מה-token
+                String email = jwtUtil.extractEmail(jwt);
                 System.out.println("@GetMapping(\"/email\") email ==  -" + email + "-");
                 Users user = userRepository.findByEmail(email);
                 System.out.println("userRepository.findByEmail(email).getId() ==  -" + userRepository.findByEmail(email).getId() + "-");
@@ -167,10 +167,10 @@ public class UserController {
         try {
             System.out.println("2 GetMapping(\"/email\") -" + token + "-");
 
-            String jwt = token.substring(7); // הסרת "Bearer " מה-token
+            String jwt = token.substring(7);
 
             if (jwtUtil.validateToken(jwt)) {
-                String email = jwtUtil.extractEmail(jwt); // חילוץ ה-email מה-token
+                String email = jwtUtil.extractEmail(jwt);
                 System.out.println("@GetMapping(\"/email\") email ==  -" + email + "-");
 
                 return ResponseEntity.ok(email);
