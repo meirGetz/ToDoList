@@ -12,13 +12,13 @@ public class PhoneNumberValidator implements ConstraintValidator<ValidPhoneNumbe
 
     @Override
     public void initialize(ValidPhoneNumber constraintAnnotation) {
-        // אין צורך באתחול נוסף כאן
+
     }
 
     @Override
     public boolean isValid(String phoneNumber, ConstraintValidatorContext context) {
         if (phoneNumber == null) {
-            return false; // אם המחרוזת ריקה, היא לא תקינה
+            return false;
         }
         pattern = Pattern.compile(PHONE_NUMBER_PATTERN);
         Matcher matcher = pattern.matcher(phoneNumber);

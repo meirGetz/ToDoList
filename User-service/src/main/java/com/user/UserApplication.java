@@ -9,7 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = "com.user.repositories")
 @EntityScan(basePackages = "com.user.entities")
-@ComponentScan(basePackages = {"com.user", "com.DTO"})  // הוספת ה-package שבו נמצא ה-DTO
+@ComponentScan(basePackages = {"com.user", "com.DTO"})
 public class UserApplication {
     public static void main(String[] args) {
         SpringApplication.run(UserApplication.class, args);

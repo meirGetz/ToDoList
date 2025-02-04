@@ -25,7 +25,7 @@ public class PasswordValidator implements ConstraintValidator<ValidPassword, Str
     }
 
     private boolean validatePassword(String password) {
-        System.out.println("Validating password: " + password);  // הדפסת הסיסמה
+        System.out.println("Validating password: " + password);
         pattern = Pattern.compile(PASSWORD_PATTERN);
         matcher = pattern.matcher(password);
         return matcher.matches();

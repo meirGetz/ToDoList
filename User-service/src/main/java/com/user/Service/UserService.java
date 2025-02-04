@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Transactional
 public class UserService implements IUserService {
     @Autowired
-    private PasswordEncoder passwordEncoder;  // הוספת BCryptPasswordEncoder
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserRepository repository;

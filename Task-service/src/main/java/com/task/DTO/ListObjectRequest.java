@@ -10,8 +10,8 @@ public class ListObjectRequest {
     private String description;
     private int priority;
     private String status = "Pending";
-    private LocalDateTime startTime; // נשתמש במחרוזת לפשטות
-    private LocalDateTime endTime; // נשתמש במחרוזת לפשטות
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private int days;
     private int hours;
     private int minutes;

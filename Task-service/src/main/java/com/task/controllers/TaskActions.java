@@ -5,7 +5,7 @@ import com.task.entities.ListObject;
 import com.task.repositories.TaskRepository;
 import com.task.DTO.ListObjectRequest;
 import com.task.service.AuthService;
-import com.task.service.UserService; // שירות המשתמש
+import com.task.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +20,9 @@ public class TaskActions {
     @Autowired
     private TaskRepository taskRepository;
     @Autowired
-    private AuthService authService; // שירות האימות
+    private AuthService authService;
     @Autowired
-    private UserService userService; // שירות המשתמש
+    private UserService userService;
 
     @PostMapping("/create")
     public ResponseEntity<?> createTask(@RequestHeader("Authorization") String token, @RequestBody ListObjectRequest request) {
@@ -106,7 +106,7 @@ public class TaskActions {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
         }
 
-        UserDto user = userService.getUserByToken(token.substring(7)); // קריאה לשירות המשתמש
+        UserDto user = userService.getUserByToken(token.substring(7));
         ListObject listObject = taskRepository.findById(id).orElse(null);
         if (listObject != null && (user.getId() == listObject.getUserId() || user.getRole().equals("ADMIN"))) {
             taskRepository.deleteById(id);
@@ -127,9 +127,6 @@ public class TaskActions {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
         }
-
-
-
         List<ListObject> tasks = taskRepository.findByUserId(userService.getUserId(token.substring(7)));
         if (tasks.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
